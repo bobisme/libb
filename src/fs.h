@@ -3,15 +3,25 @@
 #ifndef FS_H
 #define FS_H
 
+#include "result.h"
 #include "str.h"
 
 // Forward declaration
 typedef struct Arena Arena;
 
+enum FileErrorCode {
+  FileOpenFailed,
+  FileReadFailed,
+  FileDoesNotExist,
+  FileStatFailed,
+};
+
+DEFINE_RESULT(FReadResult, Str, enum FileErrorCode);
+
 // Read entire file into arena, return as Str
-Str fs_read_file(Arena *a, const char *path);
+FReadResult fs_read_file(Arena *a, const char *path);
 
 // Check if file exists
-int fs_exists(const char *path);
+bool fs_exists(const char *path);
 
 #endif // FS_H

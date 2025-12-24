@@ -14,7 +14,7 @@ SRCS = $(SRC_DIR)/arena.c $(SRC_DIR)/str.c $(SRC_DIR)/fs.c $(SRC_DIR)/vec.c
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
 # Test executables
-TESTS = $(BUILD_DIR)/test_arena $(BUILD_DIR)/test_str $(BUILD_DIR)/test_vec
+TESTS = $(BUILD_DIR)/test_arena $(BUILD_DIR)/test_str $(BUILD_DIR)/test_vec $(BUILD_DIR)/test_fs
 
 .PHONY: all clean test
 
@@ -34,6 +34,9 @@ $(BUILD_DIR)/test_str: $(TEST_DIR)/test_str.c $(BUILD_DIR)/str.o $(BUILD_DIR)/ar
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 $(BUILD_DIR)/test_vec: $(TEST_DIR)/test_vec.c $(BUILD_DIR)/arena.o $(BUILD_DIR)/vec.o | $(BUILD_DIR)
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+$(BUILD_DIR)/test_fs: $(TEST_DIR)/test_fs.c $(BUILD_DIR)/fs.o $(BUILD_DIR)/str.o $(BUILD_DIR)/arena.o | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 test: $(TESTS)
