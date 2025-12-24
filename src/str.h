@@ -22,6 +22,10 @@ struct Str {
 // Create Str from C string literal
 #define str_lit(s) ((Str){.p = (s), .n = sizeof(s) - 1})
 
+static inline Str str_new(const char *ptr, size_t len) {
+  return (Str){.p = ptr, .n = len};
+}
+
 // Create Str from null-terminated C string
 static inline Str str_from_cstr(const char *s) {
   return (Str){.p = s, .n = s ? strlen(s) : 0};
