@@ -8,15 +8,24 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "result.h"
+#include "types.h"
+
 // Forward declaration
 typedef struct Arena Arena;
 
 // Non-owning view into string data. NOT null-terminated.
 typedef struct Str Str;
-
 struct Str {
   const char *p;
   size_t n;
+};
+
+// Iterator of Str's
+typedef struct StrSplitIter StrSplitIter;
+struct StrSplitIter {
+  Str str;
+  char delim;
 };
 
 // Create Str from C string literal
@@ -53,14 +62,16 @@ static inline bool str_ends_with(Str s, Str suffix) {
          memcmp(s.p + s.n - suffix.n, suffix.p, suffix.n) == 0;
 }
 
-// Functions requiring implementation
 Str str_trim(Str s);
-int64_t str_to_i64(Str s, bool *ok);
-int64_t str_parse_i64(Str *s); // Parse and advance pointer
 
-// Functions requiring arena
-Str *str_split_lines(Arena *a, Str s, size_t *count);
-Str *str_split(Arena *a, Str s, char delim, size_t *count);
+StrSplitIter str_split(Str s, char delim);
+bool str_iter_split_next(StrSplitIter *it, Str *out);
+
+StrSplitIter str_split_lines(Str s);
 char *str_to_cstr(Arena *a, Str s); // Null-terminated copy
+
+DEFINE_RESULT(ToI64, i64, int);
+
+ToI64 str_to_i64(Str s);
 
 #endif // STR_H
